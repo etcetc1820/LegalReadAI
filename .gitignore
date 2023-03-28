@@ -1,2 +1,2 @@
 # Ignore a specific folder
-node_modules
+/node_modules
