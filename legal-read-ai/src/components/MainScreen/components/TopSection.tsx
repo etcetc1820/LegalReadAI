@@ -5,7 +5,7 @@ export const TopSection: React.FC = () => {
     <main className="pt-16 sm:pt-32 bg-gray-100 mx-auto" id="home">
       <div className="flex flex-col xl:flex-row justify-between">
         {/* <!-- Left Hero; Text and Buttons --> */}
-        <div className="flex flex-col flex-1 px-12 lg:pl-6 lg:pr-16 text-left mx-auto">
+        <div className="flex flex-col flex-1 px-6 sm:px-12 lg:pl-6 lg:pr-16 text-left mx-auto">
           <h1 className="font-extrabold text-4xl py-10 text-black sm:pb-10 sm:text-4xl md:text-5xl lg:text-6xl text-left">
             Welcome to LegalRead
           </h1>

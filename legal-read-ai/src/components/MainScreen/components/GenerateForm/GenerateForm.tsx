@@ -10,7 +10,11 @@ enum DocumentType {
 
 enum ErrorMsg {
   UPLOAD_FILE = 'You should upload the file first',
+  FILE_IS_TOO_BIG = 'Max file size is 5mb',
 }
+
+const fileErrors = [ErrorMsg.FILE_IS_TOO_BIG, ErrorMsg.UPLOAD_FILE];
+const basicBtnClass = 'border-2 border-buttonbg px-4 py-2 rounded-md text-lg shadow-md text-gray-400 w-full sm:w-44 sm:text-2xl lg:px-8'
 
 export const GenerateForm: React.FC = () => {
   const uploadInputRef = useRef<HTMLInputElement>(null);
@@ -25,12 +29,12 @@ export const GenerateForm: React.FC = () => {
 
   const createBtnClass = (doc: DocumentType, disabled?: boolean): string => {
     if (disabled) {
-      return 'border-2 border-buttonbg px-4 py-2 rounded-md text-lg shadow-md text-gray-400 w-44 sm:text-2xl lg:px-8';
+      return basicBtnClass;
     }
     if (doc === docType) {
-      return 'border-2 border-buttonbg px-4 py-2 rounded-md text-lg shadow-md text-gray-400 w-44 sm:text-2xl lg:px-8 bg-primary text-white';
+      return basicBtnClass + ' bg-primary text-white';
     }
-    return 'border-2 border-buttonbg px-4 py-2 rounded-md text-lg shadow-md text-gray-400 w-44 sm:text-2xl lg:px-8 hover:bg-primary hover:text-white';
+    return basicBtnClass + ' hover:bg-primary hover:text-white';
   };
 
   const changeDocType = (val: DocumentType): void => {
@@ -51,27 +55,29 @@ export const GenerateForm: React.FC = () => {
   const fileUpload = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
-    if (errorMsg === ErrorMsg.UPLOAD_FILE) {
-      setErrorMsg('');
-    }
     const newFile = e.target?.files?.[0];
-    // const reader = new FileReader();
 
     if (!newFile) {
       return;
     }
 
+    if (newFile.size > 5242880) {
+      setErrorMsg(ErrorMsg.FILE_IS_TOO_BIG);
+      return;
+    }
+    if (fileErrors.includes(errorMsg as ErrorMsg)) {
+      setErrorMsg('');
+    }
+
     setFile(newFile);
-    /* reader.readAsDataURL(newFile);
-    reader.onload = (): void => {
-      if (typeof reader.result === 'string') {
-      }
-    }; */
   };
 
   const handleSubmit = (): void => {
     if (!file) {
       setErrorMsg(ErrorMsg.UPLOAD_FILE);
+      return;
+    }
+    if (errorMsg) {
       return;
     }
     console.log({ docType, keywords, file });
@@ -86,48 +92,51 @@ export const GenerateForm: React.FC = () => {
       <p className="text-center text-lg text-gray-600">beta v 1.0</p>
       <section className="flex flex-col justify-between items-center mx-auto my-32 px-6">
         <div className="container h-96 basis-1/2 bg-white rounded-lg border border-gray-300 shadow-md">
-          <div className="flex items-center flex-row justify-start space-x-5 pt-3 overflow-x-auto px-2">
-            <button
-              onClick={() => changeDocType(DocumentType.CONTRACT)}
-              className={createBtnClass(DocumentType.CONTRACT, true)}
-              disabled
-            >
-              Contract
-            </button>
-            <button
-              onClick={() => changeDocType(DocumentType.CASE)}
-              className={createBtnClass(DocumentType.CASE)}
-            >
-              Case
-            </button>
-            <button
-              onClick={() => changeDocType(DocumentType.CITATION)}
-              className={createBtnClass(DocumentType.CITATION, true)}
-              disabled
-            >
-              Citation
-            </button>
+          <div className="flex sm:items-center flex-col sm:flex-row justify-start sm:space-x-5 pt-3 overflow-x-auto px-2">
+            <div className='flex space-x-5 overflow-x-auto'>
+              <button
+                onClick={() => changeDocType(DocumentType.CONTRACT)}
+                className={createBtnClass(DocumentType.CONTRACT, true)}
+                disabled
+              >
+                Contract
+              </button>
+              <button
+                onClick={() => changeDocType(DocumentType.CASE)}
+                className={createBtnClass(DocumentType.CASE)}
+              >
+                Case
+              </button>
+            </div>
+            <div className='flex space-x-5 overflow-x-auto pt-3 sm:pt-0'>
+              <button
+                onClick={() => changeDocType(DocumentType.CITATION)}
+                className={createBtnClass(DocumentType.CITATION, true)}
+                disabled
+              >
+                Citation
+              </button>
 
-            <button
-              onClick={() => changeDocType(DocumentType.ARTICLE)}
-              className={createBtnClass(DocumentType.ARTICLE, true)}
-              disabled
-            >
-              Article
-            </button>
+              <button
+                onClick={() => changeDocType(DocumentType.ARTICLE)}
+                className={createBtnClass(DocumentType.ARTICLE, true)}
+                disabled
+              >
+                Article
+              </button>
+            </div>
           </div>
           <input
             ref={uploadInputRef}
             type="file"
             accept=".pdf"
-            size={5}
             onChange={fileUpload}
             className="sr-only"
           />
 
           <div className="text-center py-12 relative">
             {file && (
-              <div className="absolute left-2">
+              <div className="absolute left-1/2 bottom-3 transform -translate-x-1/2">
                 <i className="fa-solid fa-file" />
                 <span className="pl-2">{file.name}</span>
               </div>
@@ -152,7 +161,7 @@ export const GenerateForm: React.FC = () => {
         <div className="w-full">
           <div className="py-10 flex justify-center relative">
             {errorMsg && (
-              <span className="absolute text-primary bottom-1 let-1/2">
+              <span className="absolute text-primary top-2 let-1/2">
                 {errorMsg}
               </span>
             )}
