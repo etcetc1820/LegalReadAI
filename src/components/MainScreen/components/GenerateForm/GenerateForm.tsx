@@ -14,7 +14,8 @@ enum ErrorMsg {
 }
 
 const fileErrors = [ErrorMsg.FILE_IS_TOO_BIG, ErrorMsg.UPLOAD_FILE];
-const basicBtnClass = 'border-2 border-buttonbg px-4 py-2 rounded-md text-lg shadow-md text-gray-400 w-full sm:w-44 sm:text-2xl lg:px-8'
+const basicBtnClass =
+  'border-2 border-buttonbg px-4 py-2 rounded-md text-lg shadow-md text-gray-400 w-full sm:w-44 sm:text-2xl lg:px-8';
 
 export const GenerateForm: React.FC = () => {
   const uploadInputRef = useRef<HTMLInputElement>(null);
@@ -23,6 +24,8 @@ export const GenerateForm: React.FC = () => {
   const [docType, setDocType] = useState(DocumentType.CASE);
   const [keywords, setKeywords] = useState('');
   const [file, setFile] = useState<File | null>(null);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   // temporary
   const [isGenerated, setIsGenerated] = useState(false);
@@ -81,7 +84,11 @@ export const GenerateForm: React.FC = () => {
       return;
     }
     console.log({ docType, keywords, file });
-    setIsGenerated(true);
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      setIsGenerated(true);
+    }, 500);
   };
 
   return (
@@ -93,7 +100,7 @@ export const GenerateForm: React.FC = () => {
       <section className="flex flex-col justify-between items-center mx-auto my-32 px-6">
         <div className="container h-96 basis-1/2 bg-white rounded-lg border border-gray-300 shadow-md">
           <div className="flex sm:items-center flex-col sm:flex-row justify-start sm:space-x-5 pt-3 overflow-x-auto px-2">
-            <div className='flex space-x-5 overflow-x-auto'>
+            <div className="flex space-x-5 overflow-x-auto">
               <button
                 onClick={() => changeDocType(DocumentType.CONTRACT)}
                 className={createBtnClass(DocumentType.CONTRACT, true)}
@@ -108,7 +115,7 @@ export const GenerateForm: React.FC = () => {
                 Case
               </button>
             </div>
-            <div className='flex space-x-5 overflow-x-auto pt-3 sm:pt-0'>
+            <div className="flex space-x-5 overflow-x-auto pt-3 sm:pt-0">
               <button
                 onClick={() => changeDocType(DocumentType.CITATION)}
                 className={createBtnClass(DocumentType.CITATION, true)}
@@ -169,7 +176,18 @@ export const GenerateForm: React.FC = () => {
               onClick={handleSubmit}
               className="bg-buttonbg text-white py-2 px-4 shadow-md rounded-md w-44 sm:text-2xl lg:px-8"
             >
-              Generate
+              {isLoading ? (
+                <div
+                  className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                  role="status"
+                >
+                  <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                    Loading...
+                  </span>
+                </div>
+              ) : (
+                'Generate'
+              )}
             </button>
           </div>
         </div>
