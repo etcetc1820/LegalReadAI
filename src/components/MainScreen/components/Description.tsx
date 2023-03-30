@@ -1,5 +1,3 @@
-import ratingImg from '../../../assets/rating-like-1.svg';
-
 export const Description: React.FC = () => {
   return (
     <div className="px-3">
@@ -8,7 +6,7 @@ export const Description: React.FC = () => {
           <div className="mx-auto">
             <div>
               <img
-                src={ratingImg}
+                src="/images/rating-like-1.svg"
                 className="h-44 sm:h-64 w-auto mx-auto"
                 alt=""
               />

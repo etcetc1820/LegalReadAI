@@ -1,5 +1,3 @@
-// import paperguyImgDesktop from '../../../assets/paperguy_img_desktop.svg';
-
 export const HowItWorks: React.FC = () => {
   return (
     <section className="bg-white">
@@ -35,9 +33,9 @@ export const HowItWorks: React.FC = () => {
             </div>
           </div>
         </div>
-        {/* <div className="h-40 pt-8 lg:pt-0">
-          <img src={paperguyImgDesktop} alt="" />
-        </div> */}
+        <div className="h-40 pt-8 lg:pt-0">
+          <img src="/images/paperguy_img_desktop.svg" alt="" />
+        </div>
       </div>
     </section>
   );

@@ -1,12 +1,9 @@
-import { MainScreen } from '@components/MainScreen/MainScreen';
-import Head from 'next/head';
+import { Html, Head, Main, NextScript } from 'next/document';
 
-export default function Home() {
+export default function Document() {
   return (
-    <>
+    <Html lang="en">
       <Head>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link
@@ -23,11 +20,11 @@ export default function Home() {
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.css"
         />
-        <title>Legal Read</title>
       </Head>
-      <div className="container screen">
-        <MainScreen />
-      </div>
-    </>
+      <body>
+        <Main />
+        <NextScript />
+      </body>
+    </Html>
   );
 }

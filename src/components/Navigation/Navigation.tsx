@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
-import twitterIcon from '../../assets/twitterIcon.svg';
-import linkedInIcon from '../../assets/linkedinIcon.svg';
+import { useState } from 'react';
 
 export const Navigation: React.FC = () => {
   const [isHiding, setIsHiding] = useState(true);
@@ -56,14 +54,14 @@ export const Navigation: React.FC = () => {
               target="_blank"
               rel="noreferrer"
             >
-              <img src={twitterIcon} alt="twitter icon" />
+              <img src="/icons/twitterIcon.svg" alt="twitter icon" />
             </a>
             <a
               href="https://www.linkedin.com/in/eric-harrison-jr-oly-4ab289202/"
               target="_blank"
               rel="noreferrer"
             >
-              <img src={linkedInIcon} alt="linkedin icon" />
+              <img src="/icons/linkedinIcon.svg" alt="linkedin icon" />
             </a>
           </div>
         </div>

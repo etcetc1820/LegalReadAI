@@ -1,10 +1,7 @@
-import twitterIcon from '../../assets/twitterIcon.svg';
-import linkedInIcon from '../../assets/linkedinIcon.svg';
-
 export const Footer: React.FC = () => {
   return (
     <div>
-      <div className='flex flex-col sm:flex-row items-center justify-between px-6'>
+      <div className="flex flex-col sm:flex-row items-center justify-between px-6">
         <div className="flex flex-row space-x-8 pt-2">
           <a href="#" className="text-gray-600 hover:text-primary">
             About
@@ -25,14 +22,14 @@ export const Footer: React.FC = () => {
             target="_blank"
             rel="noreferrer"
           >
-            <img src={twitterIcon} alt="Twitter" />
+            <img src="/icons/twitterIcon.svg" alt="Twitter" />
           </a>
           <a
             href="https://www.linkedin.com/in/eric-harrison-jr-oly-4ab289202/"
             target="_blank"
             rel="noreferrer"
           >
-            <img src={linkedInIcon} alt="LinkedIn" />
+            <img src="/icons/linkedinIcon.svg" alt="LinkedIn" />
           </a>
         </div>
       </div>

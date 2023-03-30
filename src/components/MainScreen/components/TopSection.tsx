@@ -1,5 +1,3 @@
-import mainDesktopImg from '../../../assets/main_desktop.png';
-
 export const TopSection: React.FC = () => {
   return (
     <main className="pt-16 sm:pt-32 bg-gray-100 mx-auto" id="home">
@@ -47,7 +45,7 @@ export const TopSection: React.FC = () => {
         {/* <!-- Right Side --> */}
         <div className="mx-auto pb-6 md:w-4/5 lg:w-1/2 xl:pb-10 pr-3">
           <img
-            src={mainDesktopImg}
+            src="/images/main_desktop.png"
             className="mx-auto w-4/5 sm:mx-0 sm:w-full"
             alt=""
           />
