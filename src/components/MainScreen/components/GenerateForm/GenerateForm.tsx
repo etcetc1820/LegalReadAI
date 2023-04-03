@@ -1,17 +1,21 @@
 import { useRef, useState } from 'react';
 import { GeneratedFile } from './GeneratedFile';
-
-enum DocumentType {
-  CONTRACT = 'Contract',
-  CASE = 'Case',
-  CITATION = 'Citation',
-  ARTICLE = 'Article',
-}
+import { DocumentTypes } from '../../../../types/document-types';
+import axios from 'axios';
 
 enum ErrorMsg {
   UPLOAD_FILE = 'You should upload the file first',
   FILE_IS_TOO_BIG = 'Max file size is 5mb',
 }
+
+type Response = {
+  data: {
+    result: {
+      content: string;
+      role: string;
+    };
+  };
+};
 
 const fileErrors = [ErrorMsg.FILE_IS_TOO_BIG, ErrorMsg.UPLOAD_FILE];
 const basicBtnClass =
@@ -21,16 +25,18 @@ export const GenerateForm: React.FC = () => {
   const uploadInputRef = useRef<HTMLInputElement>(null);
 
   const [errorMsg, setErrorMsg] = useState('');
-  const [docType, setDocType] = useState(DocumentType.CASE);
+  const [docType, setDocType] = useState<DocumentTypes>('case');
   const [keywords, setKeywords] = useState('');
   const [file, setFile] = useState<File | null>(null);
 
   const [isLoading, setIsLoading] = useState(false);
+  const [generatedFile, setGeneratedFile] = useState<{
+    content: string;
+    name: string;
+    type: string;
+  } | null>(null);
 
-  // temporary
-  const [isGenerated, setIsGenerated] = useState(false);
-
-  const createBtnClass = (doc: DocumentType, disabled?: boolean): string => {
+  const createBtnClass = (doc: DocumentTypes, disabled?: boolean): string => {
     if (disabled) {
       return basicBtnClass;
     }
@@ -40,7 +46,7 @@ export const GenerateForm: React.FC = () => {
     return basicBtnClass + ' hover:bg-primary hover:text-white';
   };
 
-  const changeDocType = (val: DocumentType): void => {
+  const changeDocType = (val: DocumentTypes): void => {
     setDocType(val);
   };
 
@@ -75,7 +81,7 @@ export const GenerateForm: React.FC = () => {
     setFile(newFile);
   };
 
-  const handleSubmit = (): void => {
+  const handleSubmit = async () => {
     if (!file) {
       setErrorMsg(ErrorMsg.UPLOAD_FILE);
       return;
@@ -83,12 +89,27 @@ export const GenerateForm: React.FC = () => {
     if (errorMsg) {
       return;
     }
-    console.log({ docType, keywords, file });
-    setIsLoading(true);
-    setTimeout(() => {
+    const formData = new FormData();
+    formData.append('document', file);
+    formData.append('type', docType);
+
+    try {
+      setIsLoading(true);
+      const {
+        data: { result },
+      }: Response = await axios.post(`/api/consulting`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      setGeneratedFile({
+        content: result.content,
+        name: file.name.split('.pdf')[0],
+        type: docType[0].toUpperCase() + docType.slice(1),
+      });
+    } catch (err: any) {
+      console.error(err.message);
+    } finally {
       setIsLoading(false);
-      setIsGenerated(true);
-    }, 500);
+    }
   };
 
   return (
@@ -102,31 +123,31 @@ export const GenerateForm: React.FC = () => {
           <div className="flex sm:items-center flex-col sm:flex-row justify-start sm:space-x-5 pt-3 overflow-x-auto px-2">
             <div className="flex space-x-5 overflow-x-auto">
               <button
-                onClick={() => changeDocType(DocumentType.CONTRACT)}
-                className={createBtnClass(DocumentType.CONTRACT, true)}
+                onClick={() => changeDocType('contract')}
+                className={createBtnClass('contract', true)}
                 disabled
               >
                 Contract
               </button>
               <button
-                onClick={() => changeDocType(DocumentType.CASE)}
-                className={createBtnClass(DocumentType.CASE)}
+                onClick={() => changeDocType('case')}
+                className={createBtnClass('case')}
               >
                 Case
               </button>
             </div>
             <div className="flex space-x-5 overflow-x-auto pt-3 sm:pt-0">
               <button
-                onClick={() => changeDocType(DocumentType.CITATION)}
-                className={createBtnClass(DocumentType.CITATION, true)}
+                onClick={() => changeDocType('citation')}
+                className={createBtnClass('citation', true)}
                 disabled
               >
                 Citation
               </button>
 
               <button
-                onClick={() => changeDocType(DocumentType.ARTICLE)}
-                className={createBtnClass(DocumentType.ARTICLE, true)}
+                onClick={() => changeDocType('article')}
+                className={createBtnClass('article', true)}
                 disabled
               >
                 Article
@@ -191,7 +212,7 @@ export const GenerateForm: React.FC = () => {
             </button>
           </div>
         </div>
-        {isGenerated && <GeneratedFile />}
+        {generatedFile && <GeneratedFile generatedFile={generatedFile} />}
       </section>
     </div>
   );

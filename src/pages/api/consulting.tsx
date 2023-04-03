@@ -61,9 +61,11 @@ export default async function handler(
         Could you provide Summary on the case?
         Could you provide Facts from those case?
         Could you provide Issue on the case?
+        Could you provide Applicable Law on the case?
+        Could you provide Breach of Contract on the case?
         Could you provide How the facts apply to the law on the case?
-        Could you provide How the facts apply to the law on the case?
-        Could you provide How the facts apply to the law on the case?
+        Could you provide Suggestions on how to move forward on the case?
+        Could you provide Gather evidence on the case?
         `,
       },
     ]);
