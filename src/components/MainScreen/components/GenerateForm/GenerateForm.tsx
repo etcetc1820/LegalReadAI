@@ -17,7 +17,6 @@ type Response = {
   };
 };
 
-const fileErrors = [ErrorMsg.FILE_IS_TOO_BIG, ErrorMsg.UPLOAD_FILE];
 const basicBtnClass =
   'border-2 border-buttonbg px-4 py-2 rounded-md text-lg shadow-md text-gray-400 w-full sm:w-44 sm:text-2xl lg:px-8';
 
@@ -70,12 +69,11 @@ export const GenerateForm: React.FC = () => {
       return;
     }
 
+    setErrorMsg('');
+
     if (newFile.size > 5242880) {
       setErrorMsg(ErrorMsg.FILE_IS_TOO_BIG);
       return;
-    }
-    if (fileErrors.includes(errorMsg as ErrorMsg)) {
-      setErrorMsg('');
     }
 
     setFile(newFile);
@@ -100,13 +98,14 @@ export const GenerateForm: React.FC = () => {
       }: Response = await axios.post(`/api/consulting`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
+      console.log(result);
       setGeneratedFile({
         content: result.content,
         name: file.name.split('.pdf')[0],
         type: docType[0].toUpperCase() + docType.slice(1),
       });
     } catch (err: any) {
-      console.error(err.message);
+      setErrorMsg(err.response.data.error.message || err.message);
     } finally {
       setIsLoading(false);
     }
