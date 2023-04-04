@@ -34,7 +34,9 @@ export const TopSection: React.FC = () => {
               <button>Try Now</button>
             </a>
             <a
-              href="#https://docs.google.com/forms/d/e/1FAIpQLScMI3ARBIBpV0xLQxZ05ZMngwgX7NiFdgJkDYui1_pEz5dLLw/viewform?usp=sf_link"
+              target="_blank"
+              rel="noreferrer"
+              href="https://docs.google.com/forms/d/e/1FAIpQLScMI3ARBIBpV0xLQxZ05ZMngwgX7NiFdgJkDYui1_pEz5dLLw/viewform?usp=sf_link"
               className="flex justify-center items-center hero_button text-center bg-primary rounded-md text-2xl text-white hover:bg-purple-400"
             >
               <button>Join Waitlist</button>
